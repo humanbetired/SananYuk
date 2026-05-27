@@ -22,7 +22,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "StockINTEL — Market Intelligence Platform",
+  title: "Platform Mas Dika Sanan - Saham Boy",
   description:
     "Real-time stock market news aggregator with threat intelligence-style analysis. Track market movers, earnings, and macro events.",
   keywords: ["stock market", "news", "market intelligence", "trading", "finance"],
