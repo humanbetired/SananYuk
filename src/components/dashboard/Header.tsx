@@ -17,7 +17,7 @@ export default function Header({
   topArticles,
   onRefresh,
 }: HeaderProps) {
-  const [currentTime, setCurrentTime] = useState(new Date());
+  const [currentTime, setCurrentTime] = useState<Date | null>(null);
 
   useEffect(() => {
     setCurrentTime(new Date());
@@ -68,11 +68,11 @@ export default function Header({
         <div className="flex items-center gap-6">
           <div className="hidden md:flex items-center gap-4 text-text-secondary">
             <div className="text-right">
-              <div className="font-mono text-xs text-text-secondary">
+              <div className="font-mono text-xs text-text-secondary" suppressHydrationWarning>
                 {currentTime ? `${format(currentTime, "HH:mm:ss")} UTC` : "-- : -- : --"}
               </div>
-              <div className="font-mono text-[10px] text-text-dim">
-                {format(currentTime, "dd MMM yyyy")}
+              <div className="font-mono text-[10px] text-text-dim" suppressHydrationWarning>
+                {currentTime ? format(currentTime, "dd MMM yyyy") : "-- --- ----"}
               </div>
             </div>
           </div>
