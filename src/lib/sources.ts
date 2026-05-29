@@ -1,6 +1,7 @@
 import type { NewsSource } from "@/types";
 
 export const NEWS_SOURCES: NewsSource[] = [
+  // Sumber yang punya RSS langsung & HTTPS
   {
     id: "cnbc-indonesia",
     name: "CNBC Indonesia",
@@ -13,6 +14,8 @@ export const NEWS_SOURCES: NewsSource[] = [
     feedUrl: "https://finance.detik.com/rss",
     category: "macro",
   },
+
+  // Via Google News RSS (reliable, selalu HTTPS, tidak perlu domain RSS khusus)
   {
     id: "bisnis-com",
     name: "Bisnis.com",
@@ -38,40 +41,24 @@ export const NEWS_SOURCES: NewsSource[] = [
     category: "analysis",
   },
   {
-    id: "emitennews",
-    name: "Emiten News",
-    feedUrl: "https://news.google.com/rss/search?q=saham+emiten+site:emitennews.com&hl=id&gl=ID&ceid=ID:id",
-    category: "earnings",
-  },
-  {
-    id: "warta-ekonomi",
-    name: "Warta Ekonomi",
-    feedUrl: "https://news.google.com/rss/search?q=saham+investasi+site:wartaekonomi.co.id&hl=id&gl=ID&ceid=ID:id",
-    category: "macro",
-  },
-  {
-    id: "kaburbursa",
-    name: "KabarBursa",
-    feedUrl: "https://news.google.com/rss/search?q=saham+bursa+site:kabarbursa.com&hl=id&gl=ID&ceid=ID:id",
+    id: "newsmaker",
+    name: "Newsmaker",
+    feedUrl: "https://news.google.com/rss/search?q=saham+IHSG+site:newsmaker.id&hl=id&gl=ID&ceid=ID:id",
     category: "market-movers",
   },
-  {
-    id: "pasardana",
-    name: "Pasardana",
-    feedUrl: "https://news.google.com/rss/search?q=saham+site:pasardana.id&hl=id&gl=ID&ceid=ID:id",
-    category: "market-movers",
-  },
-  {
-    id: "idn-financials",
-    name: "IDN Financials",
-    feedUrl: "https://news.google.com/rss/search?q=saham+emiten+site:idnfinancials.com&hl=id&gl=ID&ceid=ID:id",
-    category: "earnings",
-  },
+
+  // Tambahan: Google News agregat berita saham Indonesia
   {
     id: "google-ihsg",
-    name: "Google News IHSG",
+    name: "Google News — IHSG",
     feedUrl: "https://news.google.com/rss/search?q=IHSG+saham+Indonesia&hl=id&gl=ID&ceid=ID:id",
     category: "market-movers",
+  },
+  {
+    id: "google-emiten",
+    name: "Google News — Emiten",
+    feedUrl: "https://news.google.com/rss/search?q=emiten+bursa+efek+Indonesia&hl=id&gl=ID&ceid=ID:id",
+    category: "earnings",
   },
 ];
 
@@ -89,4 +76,17 @@ export const CATEGORY_LABELS: Record<string, string> = {
   commodities: "Komoditas",
   forex: "Valas",
   analysis: "Analisis",
+};
+
+export const SENTIMENT_KEYWORDS = {
+  bullish: [
+    "naik", "menguat", "reli", "tumbuh", "lonjak", "melejit", "positif",
+    "rekor", "untung", "laba", "surplus", "optimis", "beli", "upgrade",
+    "overweight", "outperform", "rally", "gain", "rise", "surge", "bull",
+  ],
+  bearish: [
+    "turun", "melemah", "anjlok", "jatuh", "koreksi", "rugi", "defisit",
+    "pesimis", "jual", "downgrade", "underweight", "underperform", "crash",
+    "plunge", "drop", "fall", "decline", "bear", "loss", "sell",
+  ],
 };

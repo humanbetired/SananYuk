@@ -79,12 +79,24 @@ export default function Header({
           )}
         </div>
 
-        <div className="flex items-center gap-2">
-          <div className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 bg-bg-primary rounded-full border border-bg-border">
-            <span className="text-xs font-semibold text-accent-gold">
-              {articleCount}
-            </span>
-            <span className="text-xs text-text-dim">sinyal</span>
+        {/* Right side meta */}
+        <div className="flex items-center gap-6">
+          <div className="hidden md:flex items-center gap-4 text-text-secondary">
+            <div className="text-right">
+              <div className="font-mono text-xs text-text-secondary">
+                {currentTime ? `${format(currentTime, "HH:mm:ss")} UTC` : "-- : -- : --"}
+              </div>
+              <div className="font-mono text-[10px] text-text-dim">
+                {format(currentTime, "dd MMM yyyy")}
+              </div>
+            </div>
+          </div>
+
+          <div className="hidden lg:block h-8 w-px bg-bg-border" />
+
+          <div className="hidden lg:flex flex-col items-end">
+            <span className="font-mono text-xs text-accent-gold">{articleCount}</span>
+            <span className="label-mono text-[9px]">Signals Active</span>
           </div>
           <button
             onClick={onRefresh}
