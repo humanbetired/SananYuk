@@ -25,11 +25,11 @@ export function useNews() {
         lastUpdated: new Date(),
         error: null,
       });
-    } catch (err) {
+    } catch {
       setState((prev) => ({
         ...prev,
         isLoading: false,
-        error: "Unable to fetch latest news. Retrying...",
+        error: "Gagal memuat berita. Mencoba ulang...",
       }));
     }
   }, []);
@@ -50,9 +50,10 @@ export function useFilteredNews(
   filters: FilterState
 ) {
   return articles.filter((article) => {
-    if (filters.category !== "all" && article.category !== filters.category)
-      return false;
-    if (filters.sentiment !== "all" && article.sentiment !== filters.sentiment)
+    if (
+      filters.category !== "all" &&
+      article.category !== filters.category
+    )
       return false;
     if (filters.source !== "all" && article.source !== filters.source)
       return false;

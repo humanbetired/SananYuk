@@ -1,44 +1,40 @@
 export default function LoadingSkeleton() {
   return (
-    <div className="flex-1 overflow-y-auto p-6">
-      <div className="flex items-center justify-center gap-3 mb-8 mt-12">
-        <div className="w-4 h-4 relative">
-          <svg viewBox="0 0 28 28" fill="none" className="w-full h-full animate-spin" style={{ animationDuration: "3s" }}>
-            <path d="M4 14 L10 8 L14 12 L18 6 L24 14" stroke="#C9A84C" strokeWidth="1.5" fill="none" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
-        </div>
-        <span className="font-mono text-xs text-text-secondary tracking-widest">
-          ACQUIRING SIGNALS...
+    <div className="p-4 md:p-6 max-w-3xl">
+      <div className="flex items-center gap-2 mb-6">
+        <div className="w-2 h-2 rounded-full bg-accent-gold animate-pulse" />
+        <span className="text-xs font-medium text-text-dim">
+          Memuat berita terbaru...
         </span>
       </div>
 
-      <div className="grid gap-3">
-        {/* Featured skeleton */}
-        <div className="card p-5 animate-pulse">
-          <div className="flex gap-3 mb-3">
-            <div className="h-5 w-20 bg-bg-hover rounded-sm" />
-            <div className="h-5 w-24 bg-bg-hover rounded-sm" />
-          </div>
-          <div className="h-6 w-3/4 bg-bg-hover rounded-sm mb-2" />
-          <div className="h-4 w-full bg-bg-hover rounded-sm mb-1" />
-          <div className="h-4 w-5/6 bg-bg-hover rounded-sm mb-1" />
-          <div className="h-4 w-2/3 bg-bg-hover rounded-sm" />
+      <div className="card p-5 mb-4 animate-pulse">
+        <div className="flex gap-2 mb-3">
+          <div className="h-6 w-16 bg-bg-hover rounded-full" />
+          <div className="h-6 w-24 bg-bg-hover rounded-full" />
         </div>
+        <div className="h-5 w-3/4 bg-bg-hover rounded-lg mb-2" />
+        <div className="h-5 w-5/6 bg-bg-hover rounded-lg mb-4" />
+        <div className="h-4 w-full bg-bg-hover rounded-lg mb-1" />
+        <div className="h-4 w-4/5 bg-bg-hover rounded-lg" />
+      </div>
 
-        {/* Regular skeletons */}
-        {Array.from({ length: 8 }).map((_, i) => (
-          <div key={i} className="card p-4 animate-pulse" style={{ animationDelay: `${i * 80}ms` }}>
-            <div className="flex justify-between mb-2">
-              <div className="flex gap-2">
-                <div className="h-3 w-16 bg-bg-hover rounded-sm" />
-                <div className="h-3 w-20 bg-bg-hover rounded-sm" />
-              </div>
-              <div className="h-3 w-12 bg-bg-hover rounded-sm" />
+      <div className="flex flex-col gap-2">
+        {Array.from({ length: 6 }).map((_, i) => (
+          <div
+            key={i}
+            className="card px-4 py-3.5 animate-pulse"
+            style={{ animationDelay: i * 60 + "ms" }}
+          >
+            <div className="flex gap-2 mb-2">
+              <div className="w-2 h-2 rounded-full bg-bg-hover mt-1 shrink-0" />
+              <div className="h-3 w-20 bg-bg-hover rounded" />
+              <div className="h-3 w-16 bg-bg-hover rounded" />
             </div>
-            <div className="h-4 w-5/6 bg-bg-hover rounded-sm mb-1" />
-            <div className="h-4 w-3/4 bg-bg-hover rounded-sm mb-2" />
-            <div className="h-3 w-full bg-bg-hover rounded-sm mb-1" />
-            <div className="h-3 w-4/5 bg-bg-hover rounded-sm" />
+            <div className="h-4 w-5/6 bg-bg-hover rounded mb-1" />
+            <div className="h-4 w-3/4 bg-bg-hover rounded mb-2" />
+            <div className="h-3 w-full bg-bg-hover rounded mb-1" />
+            <div className="h-3 w-4/5 bg-bg-hover rounded" />
           </div>
         ))}
       </div>

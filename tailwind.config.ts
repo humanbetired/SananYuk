@@ -9,37 +9,36 @@ const config: Config = {
   theme: {
     extend: {
       fontFamily: {
-        display: ["var(--font-display)", "serif"],
-        mono: ["var(--font-mono)", "monospace"],
-        body: ["var(--font-body)", "sans-serif"],
+        body: ["var(--font-poppins)", "sans-serif"],
+        mono: ["var(--font-poppins)", "sans-serif"],
+        display: ["var(--font-poppins)", "sans-serif"],
       },
       colors: {
         bg: {
-          primary: "#0A0B0D",
-          secondary: "#0F1117",
-          card: "#13161C",
-          hover: "#181C24",
-          border: "#1E2330",
+          primary: "#F8F7F4",
+          secondary: "#FFFFFF",
+          card: "#FFFFFF",
+          hover: "#F3F1ED",
+          border: "#E8E4DC",
         },
         accent: {
-          gold: "#C9A84C",
-          "gold-dim": "#8A6E2F",
-          green: "#22C55E",
-          red: "#EF4444",
-          blue: "#3B82F6",
-          muted: "#6B7280",
+          gold: "#B8860B",
+          "gold-dim": "#D4A843",
+          green: "#2D7A4F",
+          red: "#C0392B",
+          blue: "#2471A3",
+          muted: "#9B9080",
         },
         text: {
-          primary: "#F0EDE8",
-          secondary: "#9CA3AF",
-          dim: "#4B5563",
+          primary: "#2C2A26",
+          secondary: "#6B6560",
+          dim: "#B0A898",
         },
       },
       animation: {
-        "pulse-slow": "pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite",
-        "fade-in": "fadeIn 0.4s ease-out forwards",
-        "slide-up": "slideUp 0.5s ease-out forwards",
-        ticker: "ticker 40s linear infinite",
+        ticker: "ticker 50s linear infinite",
+        "fade-in": "fadeIn 0.3s ease-out forwards",
+        "slide-up": "slideUp 0.4s ease-out forwards",
       },
       keyframes: {
         fadeIn: {
@@ -47,7 +46,7 @@ const config: Config = {
           "100%": { opacity: "1" },
         },
         slideUp: {
-          "0%": { opacity: "0", transform: "translateY(12px)" },
+          "0%": { opacity: "0", transform: "translateY(8px)" },
           "100%": { opacity: "1", transform: "translateY(0)" },
         },
         ticker: {

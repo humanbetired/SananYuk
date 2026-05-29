@@ -8,50 +8,46 @@ interface StatsBarProps {
 
 export default function StatsBar({ articles }: StatsBarProps) {
   const total = articles.length;
-  const bullish = articles.filter((a) => a.sentiment === "bullish").length;
-  const bearish = articles.filter((a) => a.sentiment === "bearish").length;
-  const neutral = total - bullish - bearish;
-
-  const bullPct = total ? Math.round((bullish / total) * 100) : 0;
-  const bearPct = total ? Math.round((bearish / total) * 100) : 0;
-
   const sources = Array.from(new Set(articles.map((a) => a.source))).length;
-  const tickers = Array.from(new Set(articles.flatMap((a) => a.tickers || []))).length;
+
+  const categoryCounts: Record<string, number> = {};
+  articles.forEach((a) => {
+    categoryCounts[a.category] = (categoryCounts[a.category] || 0) + 1;
+  });
+  const topCategory = Object.entries(categoryCounts).sort(
+    (x, y) => y[1] - x[1]
+  )[0];
 
   return (
-    <div className="border-b border-bg-border bg-bg-secondary px-6 py-3">
-      <div className="flex items-center gap-8 flex-wrap">
-        {/* Sentiment gauge */}
-        <div className="flex items-center gap-3">
-          <span className="label-mono text-[10px]">Market Sentiment</span>
-          <div className="flex items-center gap-1">
-            <div className="h-1.5 rounded-full bg-accent-green" style={{ width: `${bullPct * 0.6}px`, minWidth: "4px" }} />
-            <div className="h-1.5 rounded-full bg-text-dim" style={{ width: `${(100 - bullPct - bearPct) * 0.3}px`, minWidth: "4px" }} />
-            <div className="h-1.5 rounded-full bg-accent-red" style={{ width: `${bearPct * 0.6}px`, minWidth: "4px" }} />
-          </div>
-          <span className="font-mono text-xs text-accent-green">{bullPct}%</span>
-          <span className="font-mono text-xs text-text-dim">/</span>
-          <span className="font-mono text-xs text-accent-red">{bearPct}%</span>
-        </div>
-
-        <div className="h-4 w-px bg-bg-border" />
-
-        {/* Stats */}
+    <div className="bg-bg-secondary border-b border-bg-border px-4 md:px-6 py-2.5">
+      <div className="flex items-center gap-4 md:gap-6 flex-wrap">
         {[
-          { label: "Signals", value: total },
-          { label: "Bullish", value: bullish, color: "text-accent-green" },
-          { label: "Bearish", value: bearish, color: "text-accent-red" },
-          { label: "Neutral", value: neutral },
-          { label: "Sources", value: sources },
-          { label: "Tickers", value: tickers },
+          { label: "Total Berita", value: total, color: "text-text-primary" },
+          { label: "Sumber Aktif", value: sources, color: "text-accent-blue" },
         ].map(({ label, value, color }) => (
-          <div key={label} className="flex items-baseline gap-1.5">
-            <span className={`font-mono text-sm font-semibold ${color || "text-text-primary"}`}>
-              {value}
-            </span>
-            <span className="label-mono text-[10px]">{label}</span>
+          <div key={label} className="flex items-center gap-1.5 shrink-0">
+            <span className={"text-sm font-semibold " + color}>{value}</span>
+            <span className="text-[11px] text-text-dim">{label}</span>
           </div>
         ))}
+
+        {topCategory && (
+          <>
+            <div className="h-4 w-px bg-bg-border shrink-0 hidden md:block" />
+            <div className="flex items-center gap-1.5 shrink-0">
+              <div className="w-1.5 h-1.5 rounded-full bg-accent-gold" />
+              <span className="text-[11px] text-text-dim">
+                Terbanyak:
+              </span>
+              <span className="text-[11px] font-semibold text-text-primary capitalize">
+                {topCategory[0].replace("-", " ")}
+              </span>
+              <span className="text-[11px] text-text-dim">
+                ({topCategory[1]} berita)
+              </span>
+            </div>
+          </>
+        )}
       </div>
     </div>
   );
