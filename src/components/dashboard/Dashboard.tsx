@@ -3,6 +3,7 @@
 import { useState, useMemo } from "react";
 import { useNews, useFilteredNews } from "@/hooks/useNews";
 import Header from "@/components/dashboard/Header";
+import MarketBar from "@/components/dashboard/MarketBar";
 import FilterPanel from "@/components/dashboard/FilterPanel";
 import StatsBar from "@/components/dashboard/StatsBar";
 import NewsCard from "@/components/news/NewsCard";
@@ -46,7 +47,7 @@ export default function Dashboard() {
         topArticles={articles.slice(0, 15)}
         onRefresh={refresh}
       />
-
+      <MarketBar />
       <StatsBar articles={articles} />
 
       <div className="flex flex-1 overflow-hidden">

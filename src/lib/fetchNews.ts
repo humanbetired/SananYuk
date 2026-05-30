@@ -1,23 +1,35 @@
 import type { NewsArticle, NewsCategory } from "@/types";
-import { NEWS_SOURCES, RSS_TO_JSON_API } from "./sources";
+import { NEWS_SOURCES } from "./sources";
+import { XMLParser } from "fast-xml-parser";
 
 interface RssItem {
   title: string;
   link: string;
-  pubDate: string;
-  description: string;
-  content: string;
-  enclosure?: { link: string; type: string };
-  thumbnail?: string;
+  pubDate?: string;
+  published?: string;
+  updated?: string;
+  description?: string;
+  "content:encoded"?: string;
+  content?: string;
+  enclosure?: { "@_url": string; "@_type": string };
+  "media:content"?: { "@_url": string };
+  "media:thumbnail"?: { "@_url": string };
 }
 
-interface RssResponse {
-  status: string;
-  feed: { title: string; link: string; image: string };
-  items: RssItem[];
+interface RssChannel {
+  item?: RssItem | RssItem[];
+  entry?: RssItem | RssItem[];
+  title?: string;
+  link?: string;
+}
+
+interface RssFeed {
+  rss?: { channel?: RssChannel };
+  feed?: RssChannel;
 }
 
 function stripHtml(html: string): string {
+  if (!html) return "";
   return html
     .replace(/<[^>]*>/g, " ")
     .replace(/&amp;/g, "&")
@@ -30,34 +42,90 @@ function stripHtml(html: string): string {
     .trim();
 }
 
+function resolveLink(link: unknown): string {
+  if (typeof link === "string") return link;
+  if (Array.isArray(link)) return link[0] ?? "";
+  if (typeof link === "object" && link !== null) {
+    const l = link as Record<string, unknown>;
+    return (l["@_href"] as string) ?? "";
+  }
+  return "";
+}
+
 async function fetchFeed(
   sourceId: string,
   feedUrl: string,
   category: NewsCategory
 ): Promise<NewsArticle[]> {
   try {
-    const url = `${RSS_TO_JSON_API}?rss_url=${encodeURIComponent(feedUrl)}&count=10`;
-    const res = await fetch(url, { next: { revalidate: 60 } });
+    const res = await fetch(feedUrl, {
+      cache: "no-store",
+      headers: {
+        "User-Agent": "Mozilla/5.0 (compatible; DikSaham/1.0)",
+        "Accept": "application/rss+xml, application/xml, text/xml, */*",
+      },
+      signal: AbortSignal.timeout(8000), // timeout 8 detik
+    });
+
     if (!res.ok) return [];
-    const data: RssResponse = await res.json();
-    if (data.status !== "ok" || !data.items) return [];
+
+    const xml = await res.text();
+    if (!xml || xml.trim() === "") return [];
+
+    const parser = new XMLParser({
+      ignoreAttributes: false,
+      attributeNamePrefix: "@_",
+      textNodeName: "#text",
+      isArray: (name) => ["item", "entry"].includes(name),
+    });
+
+    const parsed: RssFeed = parser.parse(xml);
+
+    // Support RSS 2.0 dan Atom
+    const channel = parsed?.rss?.channel ?? parsed?.feed;
+    if (!channel) return [];
+
+    const rawItems: RssItem[] = [
+      ...((channel.item as RssItem[]) ?? []),
+      ...((channel.entry as RssItem[]) ?? []),
+    ];
+
+    if (rawItems.length === 0) return [];
 
     const source = NEWS_SOURCES.find((s) => s.id === sourceId);
+    const now = Date.now();
 
-    return data.items.map((item, idx) => {
-      const summary =
-        stripHtml(item.description || item.content || "").slice(0, 200) + "...";
+    return rawItems.map((item, idx) => {
+      const rawContent =
+        item["content:encoded"] ||
+        item.description ||
+        item.content ||
+        "";
+
+      const summary = stripHtml(rawContent).slice(0, 220) + "...";
+
+      const pubDate =
+        item.pubDate ||
+        item.published ||
+        item.updated ||
+        new Date().toISOString();
+
+      const imageUrl =
+        item["media:thumbnail"]?.["@_url"] ||
+        item["media:content"]?.["@_url"] ||
+        item.enclosure?.["@_url"] ||
+        undefined;
 
       return {
-        id: `${sourceId}-${idx}-${Date.now()}`,
-        title: stripHtml(item.title),
+        id: `${sourceId}-${idx}-${now}`,
+        title: stripHtml(String(item.title ?? "")),
         summary,
-        source: source?.name || sourceId,
-        sourceUrl: data.feed?.link || feedUrl,
-        url: item.link,
-        publishedAt: item.pubDate,
+        source: source?.name ?? sourceId,
+        sourceUrl: resolveLink(channel.link) || feedUrl,
+        url: resolveLink(item.link),
+        publishedAt: String(pubDate),
         category,
-        imageUrl: item.thumbnail || item.enclosure?.link || undefined,
+        imageUrl,
       } satisfies NewsArticle;
     });
   } catch {
@@ -79,6 +147,7 @@ export async function fetchAllNews(): Promise<NewsArticle[]> {
 
   const seen = new Set<string>();
   const unique = allArticles.filter((a) => {
+    if (!a.title || a.title.trim() === "") return false;
     const key = a.title.slice(0, 60).toLowerCase();
     if (seen.has(key)) return false;
     seen.add(key);

@@ -50,10 +50,7 @@ export function useFilteredNews(
   filters: FilterState
 ) {
   return articles.filter((article) => {
-    if (
-      filters.category !== "all" &&
-      article.category !== filters.category
-    )
+    if (filters.category !== "all" && article.category !== filters.category)
       return false;
     if (filters.source !== "all" && article.source !== filters.source)
       return false;
