@@ -47,7 +47,7 @@ export default function Header({
           </div>
           <div>
             <div className="font-semibold text-base text-text-primary tracking-tight">
-              Dik<span className="text-accent-gold">Saham</span>
+              Stock<span className="text-accent-gold"> Insight</span>
             </div>
             <div className="text-[9px] text-text-dim font-medium tracking-widest uppercase leading-none hidden sm:block">
               Indonesia Market Feed

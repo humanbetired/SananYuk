@@ -2,6 +2,7 @@
 
 import { CATEGORY_LABELS } from "@/lib/sources";
 import type { FilterState, NewsCategory } from "@/types";
+import SourceLinks from "@/components/dashboard/SourceLinks";
 
 interface FilterPanelProps {
   filters: FilterState;
@@ -144,6 +145,7 @@ export default function FilterPanel({
             ))}
           </div>
         </div>
+        <SourceLinks />
       </aside>
     </div>
   );

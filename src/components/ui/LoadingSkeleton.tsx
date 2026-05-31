@@ -4,7 +4,7 @@ export default function LoadingSkeleton() {
       <div className="flex items-center gap-2 mb-6">
         <div className="w-2 h-2 rounded-full bg-accent-gold animate-pulse" />
         <span className="text-xs font-medium text-text-dim">
-          Memuat berita terbaru...
+          Sabar lekkk...
         </span>
       </div>
 

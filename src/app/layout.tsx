@@ -10,8 +10,11 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: "DikSaham",
+  title: "Stock Insight",
   description: "Real-time stock market news aggregator untuk pasar saham Indonesia.",
+  icons: {
+    icon: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌾</text></svg>",
+  },
 };
 
 export default function RootLayout({
